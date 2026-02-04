@@ -536,6 +536,10 @@ mod tests {
         assert_eq!(base_sepolia.namespace, "eip155");
         assert_eq!(base_sepolia.reference, "84532");
 
+        let berachain = chain_id_by_network_name("berachain").unwrap();
+        assert_eq!(berachain.namespace, "eip155");
+        assert_eq!(berachain.reference, "80094");
+
         let polygon = chain_id_by_network_name("polygon").unwrap();
         assert_eq!(polygon.namespace, "eip155");
         assert_eq!(polygon.reference, "137");
@@ -557,6 +561,10 @@ mod tests {
         let network_name = network_name_by_chain_id(&chain_id).unwrap();
         assert_eq!(network_name, "base");
 
+        let berachain_chain_id = ChainId::new("eip155", "80094");
+        let network_name = network_name_by_chain_id(&berachain_chain_id).unwrap();
+        assert_eq!(network_name, "berachain");
+
         let celo_chain_id = ChainId::new("eip155", "42220");
         let network_name = network_name_by_chain_id(&celo_chain_id).unwrap();
         assert_eq!(network_name, "celo");
@@ -577,6 +585,9 @@ mod tests {
     fn test_chain_id_as_network_name() {
         let chain_id = ChainId::new("eip155", "8453");
         assert_eq!(chain_id.as_network_name(), Some("base"));
+
+        let berachain_chain_id = ChainId::new("eip155", "80094");
+        assert_eq!(berachain_chain_id.as_network_name(), Some("berachain"));
 
         let celo_chain_id = ChainId::new("eip155", "42220");
         assert_eq!(celo_chain_id.as_network_name(), Some("celo"));

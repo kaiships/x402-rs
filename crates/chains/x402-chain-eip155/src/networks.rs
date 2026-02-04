@@ -310,3 +310,103 @@ impl KnownNetworkEip155<Eip155TokenDeployment> for USDC {
         }
     }
 }
+
+/// Berachain USDC.e (Stargate) token deployment (EIP-3009 compatible).
+pub fn berachain_usdc_e() -> Eip155TokenDeployment {
+    Eip155TokenDeployment {
+        chain_reference: Eip155ChainReference::new(80094),
+        address: alloy_primitives::address!("0x549943e04f40284185054145c6E4e9568C1D3241"),
+        decimals: 6,
+        eip712: Some(TokenDeploymentEip712 {
+            name: "Bridged USDC (Stargate)".into(),
+            version: "2".into(),
+        }),
+    }
+}
+
+/// Berachain USDT0 token deployment (EIP-3009 compatible).
+pub fn berachain_usdt0() -> Eip155TokenDeployment {
+    Eip155TokenDeployment {
+        chain_reference: Eip155ChainReference::new(80094),
+        address: alloy_primitives::address!("0x779ded0c9e1022225f8e0630b35a9b54be713736"),
+        decimals: 6,
+        eip712: Some(TokenDeploymentEip712 {
+            name: "USD₮0".into(),
+            version: "1".into(),
+        }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use alloy_primitives::{B256, keccak256};
+    use std::str::FromStr;
+
+    fn eip712_domain_separator(
+        name: &str,
+        version: &str,
+        chain_id: u64,
+        verifying_contract: alloy_primitives::Address,
+    ) -> B256 {
+        let type_hash = keccak256(
+            b"EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)",
+        );
+        let name_hash = keccak256(name.as_bytes());
+        let version_hash = keccak256(version.as_bytes());
+
+        let mut chain_id_bytes = [0u8; 32];
+        chain_id_bytes[24..].copy_from_slice(&chain_id.to_be_bytes());
+
+        let mut verifying_contract_bytes = [0u8; 32];
+        verifying_contract_bytes[12..].copy_from_slice(verifying_contract.as_slice());
+
+        let mut encoded = Vec::with_capacity(32 * 5);
+        encoded.extend_from_slice(type_hash.as_slice());
+        encoded.extend_from_slice(name_hash.as_slice());
+        encoded.extend_from_slice(version_hash.as_slice());
+        encoded.extend_from_slice(&chain_id_bytes);
+        encoded.extend_from_slice(&verifying_contract_bytes);
+
+        keccak256(encoded)
+    }
+
+    #[test]
+    fn berachain_usdc_e_domain_separator_matches() {
+        let token = berachain_usdc_e();
+        let eip712 = token
+            .eip712
+            .expect("expected EIP-712 domain for berachain usdc.e");
+        let sep = eip712_domain_separator(
+            &eip712.name,
+            &eip712.version,
+            token.chain_reference.inner(),
+            token.address,
+        );
+
+        let expected =
+            B256::from_str("0x4b626f7eb2448e0fc548ddb0f71a0304bdcee06bb20c2b1842968ca7efbe0f15")
+                .unwrap();
+        assert_eq!(sep, expected);
+    }
+
+    #[test]
+    fn berachain_usdt0_domain_separator_matches() {
+        let token = berachain_usdt0();
+        let eip712 = token
+            .eip712
+            .expect("expected EIP-712 domain for berachain usdt0");
+        let sep = eip712_domain_separator(
+            &eip712.name,
+            &eip712.version,
+            token.chain_reference.inner(),
+            token.address,
+        );
+
+        let expected =
+            B256::from_str("0x8a8022b3f85f8f380708972e729ffc491fd3bcc3b0674186372823b0ffab71e6")
+                .unwrap();
+        assert_eq!(sep, expected);
+    }
+}

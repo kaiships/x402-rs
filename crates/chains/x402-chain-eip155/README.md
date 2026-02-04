@@ -89,6 +89,7 @@ let settle_response = facilitator.settle( & settle_request).await?;
 The crate includes built-in support for many EVM networks through the `KnownNetworkEip155` trait:
 
 - **Base** (mainnet and Sepolia testnet)
+- **Berachain** (see helpers below)
 - **Polygon** (mainnet and Amoy testnet)
 - **Avalanche** (C-Chain and Fuji testnet)
 - **Sei** (mainnet and testnet)
@@ -99,6 +100,13 @@ The crate includes built-in support for many EVM networks through the `KnownNetw
 - **Celo** (mainnet and Sepolia testnet)
 
 Each network includes USDC token deployment information with proper EIP-712 domain parameters.
+
+## Berachain Helpers
+
+This fork includes preconfigured Berachain token deployments with EIP-712 domain parameters:
+
+- `berachain_usdc_e()` — USDC.e (Stargate) at `0x549943e04f40284185054145c6E4e9568C1D3241` (domain: `Bridged USDC (Stargate)`, version `2`)
+- `berachain_usdt0()` — USDT0 at `0x779ded0c9e1022225f8e0630b35a9b54be713736` (domain: `USD₮0`, version `1`)
 
 ## ERC-3009 and Signature Handling
 

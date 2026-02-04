@@ -1,0 +1,27 @@
+{
+  "port": 8080,
+  "host": "0.0.0.0",
+  "chains": {
+    "eip155:80094": {
+      "_comment": "Berachain",
+      "eip1559": true,
+      "signers": ["$BERACHAIN_FACILITATOR_PRIVATE_KEY"],
+      "rpc": [
+        {
+          "http": "https://rpc.berachain.com",
+          "rate_limit": 50
+        }
+      ]
+    }
+  },
+  "schemes": [
+    {
+      "id": "v1-eip155-exact",
+      "chains": "eip155:80094"
+    },
+    {
+      "id": "v2-eip155-exact",
+      "chains": "eip155:80094"
+    }
+  ]
+}

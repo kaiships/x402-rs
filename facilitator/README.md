@@ -80,6 +80,16 @@ Create a `config.json` file:
   "port": 8080,
   "host": "0.0.0.0",
   "chains": {
+    "eip155:80094": {
+      "eip1559": true,
+      "signers": ["$BERACHAIN_FACILITATOR_PRIVATE_KEY"],
+      "rpc": [
+        {
+          "http": "https://rpc.berachain.com",
+          "rate_limit": 50
+        }
+      ]
+    },
     "eip155:8453": {
       "eip1559": true,
       "signers": ["$FACILITATOR_PRIVATE_KEY"],
@@ -91,26 +101,25 @@ Create a `config.json` file:
       ]
     },
     "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": {
-      "signers": ["$SOLANA_PRIVATE_KEY"],
-      "rpc": [
-        {
-          "http": "https://api.mainnet-beta.solana.com"
-        }
-      ]
+      "signer": "$SOLANA_PRIVATE_KEY",
+      "rpc": "https://api.mainnet-beta.solana.com",
+      "pubsub": "wss://api.mainnet-beta.solana.com"
     }
   },
   "schemes": [
     {
-      "scheme": "v2-eip155-exact",
-      "chains": ["eip155:8453"]
+      "id": "v2-eip155-exact",
+      "chains": "eip155:*"
     },
     {
-      "scheme": "v2-solana-exact",
-      "chains": ["solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"]
+      "id": "v2-solana-exact",
+      "chains": "solana:*"
     }
   ]
 }
 ```
+
+For a Berachain-only setup, start from `config.berachain.json.example`.
 
 ### Environment Variables
 

@@ -2,13 +2,22 @@
   "port": 8080,
   "host": "0.0.0.0",
   "chains": {
+    "eip155:80094": {
+      "_comment": "Berachain",
+      "eip1559": true,
+      "signers": ["$BERACHAIN_FACILITATOR_PRIVATE_KEY"],
+      "rpc": [
+        {
+          "http": "https://rpc.berachain.com",
+          "rate_limit": 50
+        }
+      ]
+    },
     "eip155:84532": {
-      "_comment": "Base Sepolia"
+      "_comment": "Base Sepolia",
       "eip1559": true,
       "flashblocks": true,
-      "signers": [
-          "0xWALLET"
-      ],
+      "signers": ["$BASE_SEPOLIA_FACILITATOR_PRIVATE_KEY"],
       "rpc": [
         {
           "http": "https://rpc.com/eip155/84532",
@@ -17,29 +26,29 @@
       ]
     },
     "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": {
-      "_comment": "Solana Mainnet"
-      "signer": "SOLANA_PRIVATE_KEY",
+      "_comment": "Solana Mainnet",
+      "signer": "$SOLANA_PRIVATE_KEY",
       "rpc": "https://rpc.com/solana/5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
       "pubsub": "wss://rpc.com/solana/5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
     }
   },
   "schemes": [
-      {
-        "id": "v1-eip155-exact",
-        "chains": "eip155:*"
-      },
-      {
-        "id": "v2-eip155-exact",
-        "chains": "eip155:*"
-      },
-      {
-        "_comment": "Solana schemes allow Phantom Lighthouse program by default",
-        "id": "v1-solana-exact",
-        "chains": "solana:*"
-      },
-      {
-        "id": "v2-solana-exact",
-        "chains": "solana:*"
-      }
-    ]
+    {
+      "id": "v1-eip155-exact",
+      "chains": "eip155:*"
+    },
+    {
+      "id": "v2-eip155-exact",
+      "chains": "eip155:*"
+    },
+    {
+      "_comment": "Solana schemes allow Phantom Lighthouse program by default",
+      "id": "v1-solana-exact",
+      "chains": "solana:*"
+    },
+    {
+      "id": "v2-solana-exact",
+      "chains": "solana:*"
+    }
+  ]
 }
